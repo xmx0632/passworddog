@@ -4,3 +4,4 @@ Cargo.lock
 .env
 /data/*.db*
 .DS_Store
+passworddog.db*
