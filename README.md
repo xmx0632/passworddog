@@ -34,21 +34,49 @@
 9. 生产环境打包:使用 cargo build --release 实现生产环境打包。
 10. 开发环境打包:使用 cargo build 实现开发环境打包。
 11. 运行:使用 cargo run 实现运行。
+12. 生成文档:使用 cargo doc 实现生成文档。
+13. 支持跨平台使用
 
 ### 目录结构
 
 #### 后端
 
 ```text
- backend
+backend/
+├── src/
+│   ├── main.rs          # 主程序入口
+│   ├── models/          # 数据模型
+│   │   ├── user.rs      # 用户模型
+│   │   └── password.rs  # 密码模型
+│   ├── handlers/        # 请求处理器
+│   │   ├── auth.rs      # 认证相关
+│   │   └── password.rs  # 密码管理
+│   ├── db/             # 数据库相关
+│   │   └── sqlite.rs    # SQLite连接和操作
+│   └── utils/          # 工具函数
+│       └── crypto.rs    # 加密相关
+├── Cargo.toml          # 项目依赖配置
+└── .env               # 环境变量配置
 ```
-
 
 #### 前端
 ```text
-frontend
+frontend/
+├── src/
+│   ├── app/           # Next.js 13+ App Router
+│   │   ├── layout.tsx
+│   │   ├── page.tsx
+│   │   ├── auth/     # 认证相关页面
+│   │   └── passwords/ # 密码管理页面
+│   ├── components/    # 可复用组件
+│   │   ├── ui/       # UI组件 (shadcn)
+│   │   └── password/ # 密码相关组件
+│   └── lib/          # 工具函数和类型定义
+├── public/           # 静态资源
+├── tailwind.config.js
+├── package.json
+└── next.config.js
 ```
-
 
 ### 前端
 
@@ -85,3 +113,4 @@ json序列化使用serde实现。
 4. 生产环境打包
    1. 前端项目目录下运行 `npm run build`
    2. 后端项目目录下运行 `cargo build --release`
+
