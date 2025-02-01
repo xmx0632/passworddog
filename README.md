@@ -39,43 +39,74 @@
 
 ### 目录结构
 
-#### 后端
-
 ```text
-backend/
-├── src/
-│   ├── main.rs          # 主程序入口
-│   ├── models/          # 数据模型
-│   │   ├── user.rs      # 用户模型
-│   │   └── password.rs  # 密码模型
-│   ├── handlers/        # 请求处理器
-│   │   ├── auth.rs      # 认证相关
-│   │   └── password.rs  # 密码管理
-│   ├── db/             # 数据库相关
-│   │   └── sqlite.rs    # SQLite连接和操作
-│   └── utils/          # 工具函数
-│       └── crypto.rs    # 加密相关
-├── Cargo.toml          # 项目依赖配置
-└── .env               # 环境变量配置
+passworddog/
+├── backend/           # Rust后端
+│   ├── src/
+│   │   ├── main.rs          # 主程序入口
+│   │   ├── models/          # 数据模型
+│   │   │   ├── mod.rs       # 模块导出
+│   │   │   ├── user.rs      # 用户模型
+│   │   │   └── password.rs  # 密码模型
+│   │   ├── handlers/        # 请求处理器
+│   │   │   ├── mod.rs       # 模块导出
+│   │   │   ├── auth.rs      # 认证相关
+│   │   │   └── password.rs  # 密码管理
+│   │   ├── db/             # 数据库相关
+│   │   │   └── mod.rs      # 数据库连接和初始化
+│   │   └── utils/          # 工具函数
+│   │       ├── mod.rs      # 模块导出
+│   │       └── crypto.rs   # 加密相关
+│   ├── migrations/         # 数据库迁移
+│   │   └── 20250201_init.sql  # 初始化表结构
+│   ├── data/              # 数据文件目录
+│   ├── Cargo.toml         # 项目依赖配置
+│   └── .env              # 环境变量配置
+│
+└── frontend/          # Next.js前端
+    ├── src/
+    │   ├── app/           # Next.js 13+ App Router
+    │   │   ├── layout.tsx
+    │   │   ├── page.tsx
+    │   │   ├── auth/     # 认证相关页面
+    │   │   └── passwords/ # 密码管理页面
+    │   ├── components/    # 可复用组件
+    │   │   ├── ui/       # UI组件 (shadcn)
+    │   │   └── password/ # 密码相关组件
+    │   └── lib/          # 工具函数和类型定义
+    ├── public/           # 静态资源
+    ├── tailwind.config.js
+    ├── package.json
+    └── next.config.js
 ```
 
-#### 前端
-```text
-frontend/
-├── src/
-│   ├── app/           # Next.js 13+ App Router
-│   │   ├── layout.tsx
-│   │   ├── page.tsx
-│   │   ├── auth/     # 认证相关页面
-│   │   └── passwords/ # 密码管理页面
-│   ├── components/    # 可复用组件
-│   │   ├── ui/       # UI组件 (shadcn)
-│   │   └── password/ # 密码相关组件
-│   └── lib/          # 工具函数和类型定义
-├── public/           # 静态资源
-├── tailwind.config.js
-├── package.json
-└── next.config.js
+### 数据库设计
+
+#### 用户表 (users)
+```sql
+CREATE TABLE users (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    username TEXT NOT NULL UNIQUE,
+    password_hash TEXT NOT NULL,
+    created_at INTEGER NOT NULL,
+    updated_at INTEGER NOT NULL
+);
+```
+
+#### 密码表 (passwords)
+```sql
+CREATE TABLE passwords (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER NOT NULL,
+    title TEXT NOT NULL,
+    username TEXT NOT NULL,
+    encrypted_password TEXT NOT NULL,
+    website TEXT,
+    notes TEXT,
+    created_at INTEGER NOT NULL,
+    updated_at INTEGER NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(id)
+);
 ```
 
 ### 前端
@@ -113,4 +144,3 @@ json序列化使用serde实现。
 4. 生产环境打包
    1. 前端项目目录下运行 `npm run build`
    2. 后端项目目录下运行 `cargo build --release`
-

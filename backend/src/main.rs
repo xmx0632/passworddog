@@ -16,15 +16,22 @@ async fn main() -> std::io::Result<()> {
     env_logger::init_from_env(env_logger::Env::new().default_filter_or("info"));
     
     info!("Starting PasswordDog server...");
+
+    // 创建数据库连接池
+    let pool = db::create_pool()
+        .await
+        .expect("Failed to create database pool");
     
     // 启动HTTP服务器
-    HttpServer::new(|| {
+    HttpServer::new(move || {
         App::new()
+            .app_data(web::Data::new(pool.clone()))
             .wrap(actix_web::middleware::Logger::default())
-            // TODO: 添加路由
             .service(
                 web::scope("/api")
-                    // 后续添加具体的路由
+                    .service(handlers::login)
+                    .service(handlers::create_password)
+                    .service(handlers::list_passwords)
             )
     })
     .bind(("127.0.0.1", 8080))?

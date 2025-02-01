@@ -1,3 +1,56 @@
+# PasswordDog 前端
+
+基于 Next.js 的密码管理系统前端实现。
+
+## 技术栈
+
+- 框架：Next.js 13+ (App Router)
+- UI组件：shadcn/ui
+- 样式：TailwindCSS
+- 状态管理：React Hooks
+
+## 目录结构
+
+```text
+frontend/
+├── src/
+│   ├── app/           # Next.js 13+ App Router
+│   │   ├── layout.tsx    # 全局布局
+│   │   ├── page.tsx      # 首页
+│   │   ├── auth/         # 认证相关页面
+│   │   │   ├── login/      # 登录
+│   │   │   ├── register/   # 注册
+│   │   │   └── forgot-password/  # 忘记密码
+│   │   └── passwords/    # 密码管理页面
+│   ├── components/    # 可复用组件
+│   │   ├── ui/         # UI组件 (shadcn)
+│   │   └── password/   # 密码相关组件
+│   └── lib/          # 工具函数和类型定义
+├── public/           # 静态资源
+├── tailwind.config.js
+├── package.json
+└── next.config.js
+```
+
+## 页面设计
+
+### 1. 首页 (/)
+- 未登录时显示登录/注册选项
+- 已登录时重定向到密码管理页面
+
+### 2. 认证页面
+- 登录页面 (/auth/login)
+- 注册页面 (/auth/register)
+- 忘记密码页面 (/auth/forgot-password)
+
+### 3. 密码管理页面 (/passwords)
+- 密码列表展示
+- 添加新密码
+- 搜索和过滤功能
+- 密码详情查看
+
+## 开发指南
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
